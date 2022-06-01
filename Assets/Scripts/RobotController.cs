@@ -64,12 +64,19 @@ public class RobotController : MonoBehaviour
         transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
     }
 
+    private void ThrowBox()
+    {
+        controllerData.selectedBox.GetComponent<Rigidbody2D>().AddForce(new Vector2(10 * angleModifier, 5) , ForceMode2D.Impulse);
+        controllerData.selectedBox.GetComponent<Rigidbody2D>().AddTorque(10 * angleModifier);
+        controllerData.selectedBox = null;
+        controllerData.boxGrabbed = false;
+        GetComponent<AudioSource>().PlayOneShot(yeetSound);
+    }
+
     private void UpdateArm(float dt)
     {
         if (armStatus == YeetStateStatus.Running)
         {
-            Debug.Log("YOYO");
-            Debug.Log(armState);
             switch (armState)
             {
                 case YeetState.RaiseArm:
@@ -80,13 +87,8 @@ public class RobotController : MonoBehaviour
                     }
                     break;
                 case YeetState.Disengage:
-                    Debug.Log(controllerData.selectedBox);
                     Destroy(controllerData.selectedBox.GetComponent<HingeJoint2D>());
-                    controllerData.selectedBox.GetComponent<Rigidbody2D>().AddForce(new Vector2(10 * angleModifier, 5) , ForceMode2D.Impulse);
-                    controllerData.selectedBox.GetComponent<Rigidbody2D>().AddTorque(10 * angleModifier);
-                    controllerData.selectedBox = null;
-                    controllerData.boxGrabbed = false;
-                    GetComponent<AudioSource>().PlayOneShot(yeetSound);
+                    ThrowBox();
                     armStatus = YeetStateStatus.Finished;
                     break;
                 case YeetState.LowerArm:
@@ -95,7 +97,6 @@ public class RobotController : MonoBehaviour
                     {
                         armStatus = YeetStateStatus.Finished;
                         
-                    Debug.Log("LOWER ARM SUC");
                     }
                     break;
                 case YeetState.RaiseArmHalfway:
@@ -119,7 +120,6 @@ public class RobotController : MonoBehaviour
             else
             {
                 yeetingProcedure = new Queue<YeetState>();
-                Debug.Log("YEET OFF");
                 controllerData.yeetInProgress = false;
                 armState = YeetState.Baseline;
                 armStatus = YeetStateStatus.NotStarted;
@@ -129,8 +129,6 @@ public class RobotController : MonoBehaviour
 
     public void StartYeet(int yeeting)
     {
-        Debug.Log("YEET");
-        Debug.Log(yeeting);
 
         if (yeeting == -1)
         {
