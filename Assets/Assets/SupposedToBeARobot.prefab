@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedBox: {fileID: 0}
-  yeetInProgress: 0
+  ThrowInProgress: 0
   directionToGo: 0
   boxGrabbed: 0
   allowedGrab: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   controllerData: {fileID: 48117573033497307}
   robotSpeed: 2
   armAngularPower: 500
-  yeetSound: {fileID: 8300000, guid: 3b559af74f4328341bb9cfaecbed6d29, type: 3}
+  ThrowSound: {fileID: 8300000, guid: 3b559af74f4328341bb9cfaecbed6d29, type: 3}
 --- !u!50 &48117573033497304
 Rigidbody2D:
   serializedVersion: 4

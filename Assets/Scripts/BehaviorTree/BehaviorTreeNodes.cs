@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Leaving them all in one file because I think it's more comprehensive this way
+
 public enum NodeStatus
 {
     NotStarted = 0,
@@ -194,12 +197,12 @@ public class FindBox : BTNode
     }
 }
 
-public class YeetRed : BTNode
+public class ThrowRed : BTNode
 {
     private GameObject boundObject;
     private BTData boundData;
 
-    public YeetRed(GameObject obj)
+    public ThrowRed(GameObject obj)
     {
         boundObject = obj;
         boundData = boundObject.GetComponent<BTData>();
@@ -207,19 +210,19 @@ public class YeetRed : BTNode
 
     public override NodeStatus Tick(float dt)
     {
-        Debug.Log("Start YeetRed");
-        if (boundData.yeetInProgress == true)
+        Debug.Log("Start ThrowRed");
+        if (boundData.ThrowInProgress == true)
         {
             Status = NodeStatus.Running;
         }
-        else if (Status == NodeStatus.Running && boundData.yeetInProgress == false)
+        else if (Status == NodeStatus.Running && boundData.ThrowInProgress == false)
         {
             Status = NodeStatus.Success;
         }
         else if (boundData.selectedBox.tag == "RedBox")
         {
-            boundData.startYeet(-1);
-            boundData.yeetInProgress = true;
+            boundData.startThrow(-1);
+            boundData.ThrowInProgress = true;
             Status = NodeStatus.Running;
         }
         else
@@ -230,12 +233,12 @@ public class YeetRed : BTNode
     }
 }
 
-public class YeetBlue : BTNode
+public class ThrowBlue : BTNode
 {
     private GameObject boundObject;
     private BTData boundData;
 
-    public YeetBlue(GameObject obj)
+    public ThrowBlue(GameObject obj)
     {
         boundObject = obj;
         boundData = boundObject.GetComponent<BTData>();
@@ -243,18 +246,18 @@ public class YeetBlue : BTNode
 
     public override NodeStatus Tick(float dt)
     {
-        if (boundData.yeetInProgress == true)
+        if (boundData.ThrowInProgress == true)
         {
             Status = NodeStatus.Running;
         }
-        else if (Status == NodeStatus.Running && boundData.yeetInProgress == false)
+        else if (Status == NodeStatus.Running && boundData.ThrowInProgress == false)
         {
             Status = NodeStatus.Success;
         }
         else if (boundData.selectedBox.tag == "BlueBox")
         {
-            boundData.startYeet(1);
-            boundData.yeetInProgress = true;
+            boundData.startThrow(1);
+            boundData.ThrowInProgress = true;
             Status = NodeStatus.Running;
         }
         else

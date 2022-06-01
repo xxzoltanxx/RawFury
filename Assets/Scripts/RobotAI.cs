@@ -21,11 +21,11 @@ public class RobotAI : MonoBehaviour
 
         Selector redBlueToss = new Selector();
         
-        YeetRed yeetRed = new YeetRed(transform.gameObject);
-        YeetBlue yeetBlue = new YeetBlue(transform.gameObject);
+        ThrowRed ThrowRed = new ThrowRed(transform.gameObject);
+        ThrowBlue ThrowBlue = new ThrowBlue(transform.gameObject);
 
-        redBlueToss.addNode(yeetRed);
-        redBlueToss.addNode(yeetBlue);
+        redBlueToss.addNode(ThrowRed);
+        redBlueToss.addNode(ThrowBlue);
 
         elementarySeq.addNode(redBlueToss);
         elementarySeq.addNode(wait);

@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space") && SceneManager.GetActiveScene().name == "FirstScene")
         {
             //I should have probably polled this
             GameObject[] objsRed = GameObject.FindGameObjectsWithTag("RedBox");

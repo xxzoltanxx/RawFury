@@ -11,10 +11,10 @@ public class BTData : MonoBehaviour
     public FaceDelegate FaceLeft;
     public FaceDelegate FaceRight;
 
-    public delegate void YeetDelegate(int dir);
-    public YeetDelegate startYeet;
+    public delegate void ThrowDelegate(int dir);
+    public ThrowDelegate startThrow;
 
-    public bool yeetInProgress = false;
+    public bool ThrowInProgress = false;
     public int directionToGo = 0;
 
     public bool boxGrabbed = false;

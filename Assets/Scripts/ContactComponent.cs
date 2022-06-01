@@ -12,13 +12,13 @@ public class ContactComponent : MonoBehaviour
 
 
         private void OnTriggerEnter2D(Collider2D other) {
-        if (!data.boxGrabbed && !data.yeetInProgress && data.allowedGrab)
+        if (!data.boxGrabbed && !data.ThrowInProgress && data.allowedGrab)
         {
          if (other.gameObject.layer == 6)
          {
              data.selectedBox = other.gameObject;
              data.allowedGrab = false;
-             Debug.Log(data.yeetInProgress);
+             Debug.Log(data.ThrowInProgress);
              data.boxGrabbed = true;
              HingeJoint2D joint = other.gameObject.AddComponent<HingeJoint2D>();
              joint.connectedBody = gameObject.GetComponent<Rigidbody2D>();
@@ -29,13 +29,13 @@ public class ContactComponent : MonoBehaviour
         }
 
     private void OnTriggerStay2D(Collider2D other) {
-        if (!data.boxGrabbed && !data.yeetInProgress && data.allowedGrab)
+        if (!data.boxGrabbed && !data.ThrowInProgress && data.allowedGrab)
         {
          if (other.gameObject.layer == 6)
          {
              data.selectedBox = other.gameObject;
              data.allowedGrab = false;
-             Debug.Log(data.yeetInProgress);
+             Debug.Log(data.ThrowInProgress);
              data.boxGrabbed = true;
              HingeJoint2D joint = other.gameObject.AddComponent<HingeJoint2D>();
              joint.connectedBody = gameObject.GetComponent<Rigidbody2D>();

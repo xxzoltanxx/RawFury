@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum YeetState{
+public enum ThrowState{
     Baseline = 0,
     RaiseArm = 1,
     RaiseArmHalfway = 2,
@@ -11,7 +11,7 @@ public enum YeetState{
     Disengage = 4,
 }
 
-public enum YeetStateStatus {
+public enum ThrowStateStatus {
     NotStarted = -1,
     Finished = 0,
     Running = 1
@@ -22,13 +22,13 @@ public class RobotController : MonoBehaviour
     [SerializeField] public BTData controllerData;
     [SerializeField] public float robotSpeed = 100.0f;
     [SerializeField] public float armAngularPower = 200.0f; 
-    [SerializeField] public AudioClip yeetSound;
+    [SerializeField] public AudioClip ThrowSound;
 
     private GameObject arm;
     private GameObject armHolder;
-    private Queue<YeetState> yeetingProcedure = new Queue<YeetState>();
-    private YeetState armState = YeetState.Baseline;
-    private YeetStateStatus armStatus = YeetStateStatus.NotStarted;
+    private Queue<ThrowState> ThrowingProcedure = new Queue<ThrowState>();
+    private ThrowState armState = ThrowState.Baseline;
+    private ThrowStateStatus armStatus = ThrowStateStatus.NotStarted;
     private int angleModifier = 1;
 
     // Start is called before the first frame update
@@ -36,7 +36,7 @@ public class RobotController : MonoBehaviour
     {
         armHolder = transform.GetChild(0).gameObject;
         arm = transform.GetChild(0).GetChild(0).gameObject;
-        controllerData.startYeet = StartYeet;
+        controllerData.startThrow = StartThrow;
         controllerData.FaceLeft = FaceLeft;
         controllerData.FaceRight = FaceRight;
     }
@@ -70,82 +70,82 @@ public class RobotController : MonoBehaviour
         controllerData.selectedBox.GetComponent<Rigidbody2D>().AddTorque(10 * angleModifier);
         controllerData.selectedBox = null;
         controllerData.boxGrabbed = false;
-        GetComponent<AudioSource>().PlayOneShot(yeetSound);
+        GetComponent<AudioSource>().PlayOneShot(ThrowSound);
     }
 
     private void UpdateArm(float dt)
     {
-        if (armStatus == YeetStateStatus.Running)
+        if (armStatus == ThrowStateStatus.Running)
         {
             switch (armState)
             {
-                case YeetState.RaiseArm:
+                case ThrowState.RaiseArm:
                     armHolder.transform.Rotate(0,0, armAngularPower * dt * angleModifier);
                     if (armHolder.transform.localEulerAngles.z > 80 &&  armHolder.transform.localEulerAngles.z < (280))
                     {
-                        armStatus = YeetStateStatus.Finished;
+                        armStatus = ThrowStateStatus.Finished;
                     }
                     break;
-                case YeetState.Disengage:
+                case ThrowState.Disengage:
                     Destroy(controllerData.selectedBox.GetComponent<HingeJoint2D>());
                     ThrowBox();
-                    armStatus = YeetStateStatus.Finished;
+                    armStatus = ThrowStateStatus.Finished;
                     break;
-                case YeetState.LowerArm:
+                case ThrowState.LowerArm:
                     armHolder.transform.Rotate(0,0, - armAngularPower * dt * angleModifier);
                     if (armHolder.transform.localEulerAngles.z < 2 || armHolder.transform.localEulerAngles.z > 358)
                     {
-                        armStatus = YeetStateStatus.Finished;
+                        armStatus = ThrowStateStatus.Finished;
                         
                     }
                     break;
-                case YeetState.RaiseArmHalfway:
+                case ThrowState.RaiseArmHalfway:
                     armHolder.transform.Rotate(0,0, armAngularPower * dt * angleModifier);
                     if (armHolder.transform.localEulerAngles.z > 40)
                     {
-                        armStatus = YeetStateStatus.Finished;
+                        armStatus = ThrowStateStatus.Finished;
                     }
                     break;
                 default:
                     break;
             }
         }
-        if (armStatus == YeetStateStatus.Finished)
+        if (armStatus == ThrowStateStatus.Finished)
         {
-            if (yeetingProcedure.Count != 0)
+            if (ThrowingProcedure.Count != 0)
             {
-                armStatus = YeetStateStatus.Running;
-                armState = yeetingProcedure.Dequeue();
+                armStatus = ThrowStateStatus.Running;
+                armState = ThrowingProcedure.Dequeue();
             }
             else
             {
-                yeetingProcedure = new Queue<YeetState>();
-                controllerData.yeetInProgress = false;
-                armState = YeetState.Baseline;
-                armStatus = YeetStateStatus.NotStarted;
+                ThrowingProcedure = new Queue<ThrowState>();
+                controllerData.ThrowInProgress = false;
+                armState = ThrowState.Baseline;
+                armStatus = ThrowStateStatus.NotStarted;
             }
         }
     }
 
-    public void StartYeet(int yeeting)
+    public void StartThrow(int Throwing)
     {
 
-        if (yeeting == -1)
+        if (Throwing == -1)
         {
             FaceLeft();
-            yeetingProcedure.Enqueue(YeetState.RaiseArm);
-            yeetingProcedure.Enqueue(YeetState.Disengage);
-            yeetingProcedure.Enqueue(YeetState.LowerArm);
+            ThrowingProcedure.Enqueue(ThrowState.RaiseArm);
+            ThrowingProcedure.Enqueue(ThrowState.Disengage);
+            ThrowingProcedure.Enqueue(ThrowState.LowerArm);
         }
 
-        else if (yeeting == 1)
+        else if (Throwing == 1)
         {
             FaceRight();
-            yeetingProcedure.Enqueue(YeetState.RaiseArm);
-            yeetingProcedure.Enqueue(YeetState.Disengage);
-            yeetingProcedure.Enqueue(YeetState.LowerArm);
+            ThrowingProcedure.Enqueue(ThrowState.RaiseArm);
+            ThrowingProcedure.Enqueue(ThrowState.Disengage);
+            ThrowingProcedure.Enqueue(ThrowState.LowerArm);
         }
-        armStatus = YeetStateStatus.Running;
-        armState = yeetingProcedure.Dequeue();
+        armStatus = ThrowStateStatus.Running;
+        armState = ThrowingProcedure.Dequeue();
     }
 }
